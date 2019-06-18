@@ -16,7 +16,7 @@
     }
 </script>
 
-<style scoped lang="stylus" rel="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus">
     .header //头部公共css
         background-color #02a774
         position fixed
@@ -32,17 +32,7 @@
             transform translateY(-50%)
             width 10%
             height 50%
-            .iconfont
-                font-size 22px
-                color #fff
-        .header_search
-            position absolute
-            left 15px
-            top 50%
-            transform translateY(-50%)
-            width 10%
-            height 50%
-            .icon-sousuo
+            .icon-xiazai17
                 font-size 25px
                 color #fff
         .header_title
