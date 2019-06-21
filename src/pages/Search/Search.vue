@@ -5,35 +5,47 @@
             <input type="search" name="search" placeholder="请输入商家或美食名称" class="search_input" v-model="keyword">
             <input type="submit" name="submit" class="search_submit">
         </form>
-        <section class="list">
-            <ul class="list_container">
-                <li class="list_li">
+        <section class="list" v-if="!nosearchShops">
+            <ul class="list_container"  ref="listUl">
+                <router-link :to="{path:'/shop',query:{id:item.id}}" class="list_li" v-for="(item,index) in searchShops" :key="index">
                     <section class="item_left">
-                        <img src="" class="restaurant_img" alt="">
+                        <img :src="imgBaseUrl+item.image_path" class="restaurant_img" alt="">
                     </section>
                     <section class="item_right">
                         <div class="item_right_text">
                             <p>
-                                <span>aa</span>
+                                <span>{{item.name}}</span>
                             </p>
-                            <p>月售30单</p>
-                            <p>20元起送/距离1999m</p>
+                            <p>月售 {{item.month_sales || item.recent_order_num}} 单</p>
+                            <p>{{item.delivery_fee||item.float_minimum_order_amount}}元起送/距离{{item.distance}}</p>
                         </div>
                     </section>
-                </li>
+                </router-link>
             </ul>
         </section>
-        <div class="search_none">很抱歉，无搜索结果</div>
+        <div class="search_none" v-else>很抱歉，无搜索结果</div>
     </section>
 </template>
 
 <script>
     import Header from '../../components/Header/Header'
+    import {mapState} from 'vuex'
+    import BScroll from 'better-scroll'
     export default {
         data(){
             return{
-                keyword:''
+                keyword:'',
+                imgBaseUrl:'http://cangdu.org:8001/img/',
+                nosearchShops:false
             }
+        },
+        computed:{
+            ...mapState(['searchShops'])
+        },
+        mounted(){
+            this.$nextTick(()=>{
+                new BScroll('.list')
+            })
         },
         methods:{
             search(){
@@ -41,6 +53,11 @@
                 if(keyword){
                     this.$store.dispatch('searchShops',keyword)
                 }
+            }
+        },
+        watch:{
+            searchShops(value){
+                this.nosearchShops = !value.length;
             }
         },
         components:{
@@ -82,6 +99,7 @@
                     background-color #02a774
 
         .list
+            height 73%
             .list_container
                 background-color: #fff;
                 .list_li
@@ -99,15 +117,16 @@
                         font-size 12px
                         flex 1
                         .item_right_text
+                            width 240px
                             p
                                 line-height 12px
                                 margin-bottom 6px
+                                overflow hidden
                                 &:last-child
                                     margin-bottom 0
         .search_none
             margin: 0 auto
             color: #333
-            background-color: #fff
             text-align: center
             margin-top: 0.125rem
 </style>
