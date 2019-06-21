@@ -114,6 +114,15 @@ export default {
     //同步清空购物车
     clearCart({commit}) {
         commit(CLEAR_CART)
+    },
+    async searchShops({commit,state},keyword){
+        const geohash=state.latitude+','+state.longitude
+        const result=await reqSearchShop(geohash,keyword)
+        if(result.code===0){
+            const searchShops=result.data
+            commit(RECEIVE_SEARCH_SHOPS,{searchShops})
+        }
+
     }
 
 }

@@ -1,26 +1,60 @@
 <template>
     <section class="search">
         <Header title="搜索"></Header>
-        <form class="search_form" action="#">
-            <input type="search" name="search" placeholder="请输入商家或美食名称" class="search_input">
+        <form class="search_form" action="#" @submit.prevent="search">
+            <input type="search" name="search" placeholder="请输入商家或美食名称" class="search_input" v-model="keyword">
             <input type="submit" name="submit" class="search_submit">
         </form>
+        <section class="list">
+            <ul class="list_container">
+                <li class="list_li">
+                    <section class="item_left">
+                        <img src="" class="restaurant_img" alt="">
+                    </section>
+                    <section class="item_right">
+                        <div class="item_right_text">
+                            <p>
+                                <span>aa</span>
+                            </p>
+                            <p>月售30单</p>
+                            <p>20元起送/距离1999m</p>
+                        </div>
+                    </section>
+                </li>
+            </ul>
+        </section>
+        <div class="search_none">很抱歉，无搜索结果</div>
     </section>
 </template>
 
 <script>
     import Header from '../../components/Header/Header'
     export default {
+        data(){
+            return{
+                keyword:''
+            }
+        },
+        methods:{
+            search(){
+                const keyword=this.keyword.trim()
+                if(keyword){
+                    this.$store.dispatch('searchShops',keyword)
+                }
+            }
+        },
         components:{
             Header
         }
     }
 </script>
 
-<style scoped lang="stylus" rel="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus" scoped>
     @import "../../common/stylus/mixins.styl"
-    .search  //搜索
+    .search
         width 100%
+        height 100%
+        overflow hidden
         .search_form
             clearFix()
             margin-top 45px
@@ -47,4 +81,33 @@
                     color #fff
                     background-color #02a774
 
+        .list
+            .list_container
+                background-color: #fff;
+                .list_li
+                    display: flex;
+                    justify-content: center;
+                    padding: 10px
+                    border-bottom: 1px solid $bc;
+                    .item_left
+                        margin-right: 10px
+                        .restaurant_img
+                            width 50px
+                            height 50px
+                            display block
+                    .item_right
+                        font-size 12px
+                        flex 1
+                        .item_right_text
+                            p
+                                line-height 12px
+                                margin-bottom 6px
+                                &:last-child
+                                    margin-bottom 0
+        .search_none
+            margin: 0 auto
+            color: #333
+            background-color: #fff
+            text-align: center
+            margin-top: 0.125rem
 </style>
